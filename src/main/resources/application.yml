@@ -1,0 +1,24 @@
+
+#comentario
+spring:
+  profiles:
+    active: dev # con esto le decimos en q ambiente vamos a trabajar - dev -> aplication-dev.yml
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger.html #en el navegador http://localhost:8080/swagger.html para ver la documentacion
+
+resilience4j.circuitbreaker: # para el manejo en caso de que fallen los llamados q una api
+  instances:
+    service1:
+      registerHealthIndicator: true
+      ringBufferSizeInClosedState: 5
+      ringBufferSizeInHalfOpenState: 3
+      waitDurationInOpenState: 10s # segundos de espera
+      failureRateThreshold: 50
+      recordExceptions: # listado de las exceptions que matcheara en caso de fallo
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+        - java.util.concurrent.TimeoutException
+        - org.springframework.web.client.ResourceAccessException
